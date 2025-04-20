@@ -3,24 +3,58 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-sans: var(--font-outfit); /* ✅ updated to use Outfit */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit); /* ✅ updated */
+  --font-mono: var(--font-geist-mono); /* You can remove this if you’re not using Geist Mono */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff; /* override black */
+    --foreground: #171717;
   }
 }
+
+
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif; /* ✅ using Outfit now */
 }
+
+@keyframes zoomOnce {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-zoom-once {
+  animation: zoomOnce 5s ease-in-out forwards;
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 1s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
