@@ -15,6 +15,7 @@ export async function GET() {
             "SELECT auditorium_id, name, theater_id FROM Auditoriums"
         );
         connection.release();
+        console.log("Auditoriums:", rows); 
 
         return NextResponse.json(rows, { status: 200 });
     } catch (error) {

@@ -14,6 +14,9 @@ export default function AddMovie() {
   const [language, setLanguage] = useState("");
   const [poster, setPoster] = useState("");
   const [trailerUrl, setTrailerUrl] = useState("");
+  const [dimension, setDimension] = useState("2D");
+  const [rating, setRating] = useState("");
+
   const router = useRouter();
 
   const handleSubmit = async (event) => {
@@ -30,6 +33,8 @@ export default function AddMovie() {
           language,
           poster,
           trailerUrl,
+          dimension,
+          rating,
         }),
       });
 
@@ -48,31 +53,38 @@ export default function AddMovie() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-        <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-4xl">
-          <h1 className="text-3xl font-bold text-center text-[#FF847C] mb-10">
-            🎬 Add New Movie
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-5xl bg-white p-10 rounded-3xl shadow-2xl">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Add a New Movie
           </h1>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
             <div>
-              <label className="block mb-1 font-medium">Title</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Movie Title
+              </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
-                placeholder="Movie Title"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="e.g. Oppenheimer"
                 required
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Genre</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Genre
+              </label>
               <select
                 value={genre}
                 onChange={(e) => setGenre(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
               >
                 <option>Action</option>
                 <option>Comedy</option>
@@ -80,78 +92,126 @@ export default function AddMovie() {
                 <option>Horror</option>
                 <option>Romance</option>
                 <option>Sci-Fi</option>
+                <option>Thriller</option>
+                <option>Fantasy</option>
               </select>
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Duration (in minutes)</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Duration (in minutes)
+              </label>
               <input
                 type="number"
                 value={durationMin}
                 onChange={(e) => setDurationMin(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="e.g. 120"
                 required
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Release Date</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Release Date
+              </label>
               <input
                 type="date"
                 value={releaseDate}
                 onChange={(e) => setReleaseDate(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
                 required
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Language</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Language
+              </label>
               <input
                 type="text"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
-                placeholder="e.g., English, Hindi"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="e.g. English, Hindi"
                 required
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Poster URL</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Poster URL
+              </label>
               <input
                 type="text"
                 value={poster}
                 onChange={(e) => setPoster(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
-                placeholder="https://image.url/poster.jpg"
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="https://yourdomain.com/poster.jpg"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 font-medium text-gray-700">
+                Dimension
+              </label>
+              <select
+                value={dimension}
+                onChange={(e) => setDimension(e.target.value)}
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+              >
+                <option value="2D">2D</option>
+                <option value="3D">3D</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block mb-2 font-medium text-gray-700">
+                Rating
+              </label>
+              <input
+                type="text"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="e.g. 8.5"
                 required
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block mb-1 font-medium">Trailer URL</label>
+              <label className="block mb-2 font-medium text-gray-700">
+                Trailer URL
+              </label>
               <input
                 type="text"
                 value={trailerUrl}
                 onChange={(e) => setTrailerUrl(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
-                placeholder="https://youtube.com/..."
+                className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF847C]"
+                placeholder="https://youtube.com/watch?v=..."
                 required
               />
             </div>
 
-            <div className="md:col-span-2 flex justify-center mt-4">
+            <div className="md:col-span-2 flex flex-col sm:flex-row justify-center gap-4 mt-6">
               <button
                 type="submit"
-                className="bg-[#FF847C] hover:bg-[#ff6a62] text-white font-semibold px-8 py-3 rounded-lg transition-all duration-300 shadow-md"
+                className="bg-[#FF847C] hover:bg-[#ff6a62] text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 shadow-md"
               >
                 + Add Movie
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push("/admin/dashboard")}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-xl transition-all duration-300 shadow-md"
+              >
+                Back to Dashboard
               </button>
             </div>
           </form>
         </div>
-      </div>
+      </main>
       <Footer />
     </>
   );

@@ -125,7 +125,7 @@ export default function BookingPage() {
                   <div
                     key={show.show_id}
                     onClick={() =>
-                      router.push(`/book/${movieId}/show/${show.show_id}`)
+                      router.push(`/book/${movieId}/show/${show.show_id}/${show.auditorium_id}`)
                     }
                     className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition cursor-pointer hover:border-[#FF847C]"
                   >
