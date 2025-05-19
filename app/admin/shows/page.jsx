@@ -146,7 +146,7 @@ export default function AddShow() {
                 ) : (
                   filteredAuditoriums.map((aud) => (
                     <option key={aud.auditorium_id} value={aud.auditorium_id}>
-                      {aud.name}
+                      {aud.auditorium_name}
                     </option>
                   ))
                 )}

@@ -4,6 +4,9 @@ import { useParams, useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Footer from "@/app/_components/footer";
 import Navbar from "@/app/_components/navbar";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function SeatSelectionPage() {
   const { movieId, showId } = useParams();
@@ -68,25 +71,36 @@ export default function SeatSelectionPage() {
 
     try {
       const userId = user?.id;
+      const seatIds = Array.from(selectedSeats);
 
-      const res = await fetch("/api/bookings", {
+      // Create Stripe Checkout Session
+      const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
+          selectedSeats: seatIds,
           showId,
-          seatIds: Array.from(selectedSeats),
+          totalPrice,
+          userId,
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Booking failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Payment initiation failed");
       }
 
-      alert("Booking successful!");
-      router.push("/");
+      const { id: sessionId } = await response.json();
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+
+      if (error) {
+        throw error;
+      }
     } catch (err) {
+      console.error("Booking error:", err);
       alert(err.message);
     }
   };
@@ -104,31 +118,11 @@ export default function SeatSelectionPage() {
               Please Select Your Seats
             </h1>
             <p className="text-left text-gray-600 mb-6">
-            {showDetails.movie_title} | {showDetails.theater_name} | Screen {showDetails.auditorium_name} <br />
+              {showDetails.movie_title} | {showDetails.theater_name} | Screen {showDetails.auditorium_name} <br />
               <span className="text-sm">
                 Start: {new Date(showDetails.start_time).toLocaleString()}
               </span>
             </p>
-
-            {/* Seat Legend */}
-            <div className="flex justify-center gap-6 mb-6 text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-200 border rounded" /> Regular
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-200 border-2 border-blue-500 rounded" /> Premium
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-200 border-2 border-yellow-500 rounded" /> VIP
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-gray-400 rounded" /> Booked
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-green-500 rounded" /> Selected
-              </div>
-            </div>
-
             {/* Seat Grid */}
             <div className="grid grid-cols-10 gap-2 justify-center mb-6">
               {seats.map((seat) => (
@@ -161,21 +155,14 @@ export default function SeatSelectionPage() {
                 ━━ All Eyes on Me! ━━
               </div>
             </div>
-
-
-
-
-
-            {/* Price Summary */}
-            <div className="mt-auto">
+                        {/* Price Summary */}
+                        <div className="mt-auto">
               <div className="bg-gray-100 rounded-xl p-5 mb-6 mt-10 shadow-inner w-full max-w-md mx-auto text-left">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Booking Summary</h2>
-
                 <div className="flex justify-between items-center text-base text-gray-700 mb-2">
                   <span>Seats Selected</span>
                   <span className="text-[#FF847C] font-medium">{selectedSeats.size}</span>
                 </div>
-
                 <div className="flex justify-between items-center text-base text-gray-700">
                   <span>Total Price</span>
                   <span className="font-semibold text-black">₹{totalPrice.toFixed(2)}</span>
@@ -188,12 +175,10 @@ export default function SeatSelectionPage() {
                   disabled={selectedSeats.size === 0}
                   className="bg-[#FF847C] hover:bg-[#e66c67] transition-all duration-200 px-8 py-2.5 rounded-md text-white text-base font-medium disabled:opacity-50 shadow-md"
                 >
-                  Confirm Booking
+                  Proceed to Payment
                 </button>
               </div>
             </div>
-
-
           </div>
         </div>
         <Footer />

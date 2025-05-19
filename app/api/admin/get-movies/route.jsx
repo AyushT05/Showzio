@@ -11,7 +11,7 @@ const pool = mysql.createPool({
 export async function GET() {
   try {
     const connection = await pool.getConnection();
-    const [rows] = await connection.execute("SELECT movie_id, title FROM Movies");
+    const [rows] = await connection.execute("SELECT movie_id, title, poster FROM Movies");
     connection.release();
 
     return NextResponse.json(rows, { status: 200 });

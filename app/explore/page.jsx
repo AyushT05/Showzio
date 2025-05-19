@@ -58,17 +58,19 @@ export default function ExplorePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {movies.map((movie) => (
             <div
-              key={movie.movie_id} // Use `movie_id` as key since it's unique
+              key={movie.movie_id}
               onClick={() => router.push(`/explore/${movie.movie_id}`)}
-              className="bg-gray-100 p-4 rounded-lg shadow hover:scale-[1.02] transition"
+              className="bg-gray-100 p-4 rounded-lg shadow hover:scale-[1.02] transition cursor-pointer group"
             >
-              <Image
-                src={movie.poster} // Directly use the poster URL stored in the database
-                alt={movie.title}
-                width={400}
-                height={300}
-                className="object-cover w-full h-60 rounded-md"
-              />
+              <div className="overflow-hidden rounded-md">
+                <Image
+                  src={movie.poster}
+                  alt={movie.title}
+                  width={400}
+                  height={300}
+                  className="object-cover w-full h-60 rounded-md transform transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
               <h2 className="text-xl font-bold mt-4">{movie.title}</h2>
               <p className="text-sm text-gray-700 mt-1">{movie.genre}</p>
               <p className="text-yellow-600 font-semibold mt-2">

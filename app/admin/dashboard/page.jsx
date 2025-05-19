@@ -9,6 +9,9 @@ import {
   Rows3,
   CalendarClock,
   Armchair,
+  Trash2,
+  Settings,
+  Edit,  // Added icon for delete actions from lucide-react
 } from "lucide-react";
 
 const actions = [
@@ -36,6 +39,32 @@ const actions = [
     title: "Add Seats",
     route: "/admin/seats",
     icon: Armchair,
+  },
+  // Delete actions
+  {
+    title: "Delete Movie",
+    route: "/admin/movies/delete",
+    icon: Trash2,
+  },
+  {
+    title: "Delete Theater",
+    route: "/admin/theaters/delete",
+    icon: Trash2,
+  },
+  {
+    title: "Delete Screen",
+    route: "/admin/auditorium/delete",
+    icon: Trash2,
+  },
+  {
+    title: "Manage Shows",
+    route: "/admin/shows/delete",
+    icon: Edit,
+  },
+  {
+    title: "Delete Seats",
+    route: "/admin/seats/delete",
+    icon: Trash2,
   },
 ];
 
